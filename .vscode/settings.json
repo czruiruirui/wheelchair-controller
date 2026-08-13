@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "iic.h": "c",
+        "usart.h": "c"
+    }
+}

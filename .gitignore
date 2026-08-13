@@ -1,0 +1,12 @@
+# nested duplicate copy of the project
+/control/
+
+# Keil build output
+MDK-ARM/control/
+
+# Keil per-user / session files
+*.uvguix.*
+*.bak
+JLinkLog.txt
+JLinkSettings.ini
+EventRecorderStub.scvd
