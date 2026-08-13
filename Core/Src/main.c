@@ -76,8 +76,8 @@ void systim_task(){
 	if((current_time % 1) == 0){
 		tim_task.task_1s = true;
 	}
-	if((current_time % 14) == 0){
-		tim_task.task_10ms = true;   /* 14ms 周期：对齐标准 SBUS 遥控器帧间隔 */
+	if((current_time % 10) == 0){
+		tim_task.task_10ms = true;
 	}
 	if((current_time % 100) == 0){
 		tim_task.task_100ms = true;
@@ -161,7 +161,7 @@ int main(void)
 		systim_task();   // 定时任务调度：置位 task_10ms 等标志，否则按键扫描永远不执行
 		if(tim_task.task_10ms == true){
 			switch_scan();
-			SBUS_TX_SendFrame();   // 每 14ms 对外发送一帧 SBUS（对齐标准遥控器）
+			SBUS_TX_SendFrame();   // 每 10ms 对外发送一帧 SBUS（像遥控器一样）
 			// 底盘下发只走 SBUS（PA2），CAN 通道不用
 			//if(Enable_State){
 			//	TTL_data2can(Touch2PWM);
