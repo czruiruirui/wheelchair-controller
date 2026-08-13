@@ -5,6 +5,9 @@
 uint16_t Sbus_Ch[16];          /* debug watch: raw channel values */
 static uint8_t sbus_frame[25]; /* packed SBUS frame */
 
+/* CH9/SC 3-position switch value per gear: 1=TOP, 2=MIDDLE, 3=BOTTON */
+static const uint16_t Gear_Ch9[3] = { SBUS_CH_N100, SBUS_CH_ZERO, SBUS_CH_P100 };
+
 /* map normalized coord (-100..+100) back to SBUS raw (240..1024..1807) */
 static uint16_t coord_to_sbus_raw(int16_t coord)
 {
@@ -42,7 +45,7 @@ void SBUS_TX_SendFrame(void)
     ch[5]  = SBUS_CH_P100;                             /* CH6  knob V2 = +100 (unlock speed scale) */
     ch[6]  = Nav_Mode ? SBUS_CH_P100 : SBUS_CH_N100; /* CH7  SA = NAV switch (SOS button): BOTTON=nav, TOP=manual */
     ch[7]  = (Nav_Mode || Brake_State) ? SBUS_CH_ZERO : SBUS_CH_N100; /* CH8 SB brake: TOP=braked only when manual+horn off, MIDDLE=released (nav or manual drive) */
-    ch[8]  = SBUS_CH_ZERO;                             /* CH9  SC = neutral */
+    ch[8]  = Gear_Ch9[(dangwei >= 1 && dangwei <= 3) ? (dangwei - 1) : 0]; /* CH9 SC = speed gear: TOP=1档, MIDDLE=2档, BOTTON=3档 */
     ch[9]  = SBUS_CH_ZERO;                             /* CH10 SD = neutral */
     ch[10] = SBUS_CH_ZERO;
     ch[11] = SBUS_CH_ZERO;

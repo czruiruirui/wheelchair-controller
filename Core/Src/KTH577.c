@@ -10,7 +10,6 @@ uint16_t Joystick_X = 0, Joystick_Y = 0;      /* joystick raw X/Y coordinate fro
 int16_t Coord_X = 0, Coord_Y = 0;             /* SBUS-style normalized coord: -100 .. +100 */
 #define JOY_DEADZONE_PCT  15   //dead zone
 /* 3-gear speed limit: gear1=40%, gear2=70%, gear3=100% of full stick output */
-static const int16_t Gear_Scale[3] = {40, 70, 100}; //speed level
 int16_t Joystick_PWM1 = 0, Joystick_PWM2 = 0; /* signed PWM output per channel */
 uint8_t Serial_RxFlag;	
 extern uint8_t rx_flag;
@@ -144,12 +143,7 @@ uint8_t yaogan_processing(uint8_t res[5])
         if (nx < -100) nx = -100;
         if (ny > 100)  ny = 100;
         if (ny < -100) ny = -100;
-        /* apply gear speed limit (dangwei: 1..3) */
-        {
-            uint8_t g = (dangwei >= 1 && dangwei <= 3) ? (dangwei - 1) : 0;
-            nx = nx * Gear_Scale[g] / 100;
-            ny = ny * Gear_Scale[g] / 100;
-        }
+        /* gear speed limit moved to CH9/SC switch channel; joystick always full range */
         Coord_X = (int16_t)nx;
         Coord_Y = (int16_t)ny;
     }
